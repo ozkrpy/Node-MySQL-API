@@ -1,0 +1,18 @@
+{
+  "name": "node_mysql_rest",
+  "version": "1.0.0",
+  "description": "node project to manage rest transactions to mysql database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ozkrpy",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "boom": "^6.0.0",
+    "hapi": "^16.1.0",
+    "joi": "^10.2.2",
+    "mysql": "^2.13.0"
+  }
+}
