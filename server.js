@@ -5,6 +5,12 @@ const Joi = require('joi');
 const Bcrypt = require('bcrypt');
 var data = require('./data');
 
+/*
+    Author: ozkrpy
+    Date: 21/12/2017
+    Last modification: 21/12/2017 16:48    
+*/
+
 //SERVER INSTATIATION
 const server = new Hapi.Server();
 server.connection({
