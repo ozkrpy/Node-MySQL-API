@@ -570,3 +570,17 @@ server.route({
         }
     }
 });
+//metodo para recuperar todos los alimentos
+server.route({
+    method: data.server.typeGET,
+    path: data.server.methods.alimentos,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.alimentos,
+            function (error, results, fields) {
+                if (error) throw error;
+                console.log(data.server.methods.alimentos, "solicito toda la lista de alimentos");
+                reply(results);
+            }
+        );
+    }
+});
