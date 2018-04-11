@@ -584,3 +584,25 @@ server.route({
         );
     }
 });
+//metodo para recuperar un alimento especifico
+server.route({
+    method: data.server.typeGET,
+    path: data.server.methods.alimentoPorId,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.alimentoPorId,
+            [request.params.busqueda],
+            function (error, results, fields) {
+                if (error) throw error;
+                console.log(data.server.methods.alimentoPorId, "solicito datos alimento por Id:", request.params.busqueda);
+                reply(results);
+            }
+        );
+    },
+    config: {
+        validate: {
+            params: {//params
+                busqueda: Joi.number().integer()
+            }
+        }
+    }
+});
