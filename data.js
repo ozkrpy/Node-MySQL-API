@@ -27,6 +27,7 @@ module.exports = {
             alimentos: '/alimentos',
             alimentoPorId: '/alimentoPorId/{busqueda}',
             alimentosBusqueda: '/alimentosPorDescripcion/{busqueda}',
+            alimentoActulizar: '/alimentoActualizar/',
             dietasCodigo: '/dietas',
             dietasPorId: '/dietas/{codigoDieta}',
 
@@ -59,11 +60,16 @@ module.exports = {
             alimentos: `SELECT a.codigo_alimento, a.descripcion_alimento, b.descripcion_tipo_alimento, a.medida_casera, a.medida_casera_unidad, a.medida_real, a.medida_real_unidad, a.hidratos_carbono, a.unidad_medida_hidratos_carbono, a.proteina, a.unidad_medida_proteina, a.grasa, a.unidad_medida_grasa, a.sodio, a.unidad_medida_sodio, a.potasio, a.unidad_medida_potasio, a.fosforo, a.unidad_medida_fosforo, a.calcio, a.unidad_medida_calcio, a.hierro, a.unidad_medida_hierro, a.colesterol, a.unidad_medida_colesterol, a.purinas, a.unidad_medida_purinas, a.fibra, a.unidad_medida_fibra, a.agua, a.unidad_medida_agua, a.calorias 
                         FROM nutriciondb.alimentos a, nutriciondb.tipo_alimento b 
                         WHERE a.tipo_alimento = b.codigo_tipo_alimento`,
-            alimentoPorId: `SELECT a.codigo_alimento, a.descripcion_alimento, b.descripcion_tipo_alimento, a.medida_casera, a.medida_casera_unidad, a.medida_real, a.medida_real_unidad, a.hidratos_carbono, a.unidad_medida_hidratos_carbono, a.proteina, a.unidad_medida_proteina, a.grasa, a.unidad_medida_grasa, a.sodio, a.unidad_medida_sodio, a.potasio, a.unidad_medida_potasio, a.fosforo, a.unidad_medida_fosforo, a.calcio, a.unidad_medida_calcio, a.hierro, a.unidad_medida_hierro, a.colesterol, a.unidad_medida_colesterol, a.purinas, a.unidad_medida_purinas, a.fibra, a.unidad_medida_fibra, a.agua, a.unidad_medida_agua, a.calorias 
+            alimentoPorId: `SELECT a.codigo_alimento, a.descripcion_alimento, a.tipo_alimento, b.descripcion_tipo_alimento, a.medida_casera, a.medida_casera_unidad, a.medida_real, a.medida_real_unidad, a.hidratos_carbono, a.unidad_medida_hidratos_carbono, a.proteina, a.unidad_medida_proteina, a.grasa, a.unidad_medida_grasa, a.sodio, a.unidad_medida_sodio, a.potasio, a.unidad_medida_potasio, a.fosforo, a.unidad_medida_fosforo, a.calcio, a.unidad_medida_calcio, a.hierro, a.unidad_medida_hierro, a.colesterol, a.unidad_medida_colesterol, a.purinas, a.unidad_medida_purinas, a.fibra, a.unidad_medida_fibra, a.agua, a.unidad_medida_agua, a.calorias 
                             FROM alimentos a, tipo_alimento b 
                             WHERE a.tipo_alimento = b.codigo_tipo_alimento 
                             AND a.codigo_alimento = ?`,
             alimentosBusqueda: `SELECT * FROM alimentos WHERE descripcion_alimento LIKE ?`,
+            alimentoActulizar: `UPDATE alimentos 
+                                SET descripcion_alimento = ?, tipo_alimento = ?, medida_casera = ?, medida_real = ?,
+                                    hidratos_carbono = ?, proteina = ?, grasa = ?, sodio = ?, potasio = ?, fosforo = ?, 
+                                    calcio = ?, hierro = ?, colesterol = ?, purinas = ?, fibra = ?, agua = ?, calorias = ?
+                                WHERE codigo_alimento = ?`, 
             dietasCodigo: 'SELECT DISTINCT (d.codigo_dieta) FROM dieta d ORDER BY 1',
             dietasPorId: `SELECT d.*, a.*, p.* 
                           FROM dieta d, alimentos a, paciente p 

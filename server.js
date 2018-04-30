@@ -606,3 +606,65 @@ server.route({
         }
     }
 });
+// metodo POST actualizar informacion de laboratorio del paciente
+server.route({
+    method: data.server.typePOST,
+    path: data.server.methods.alimentoActulizar,
+    handler: function (request, reply) {
+        console.log("entro al POST de", data.server.methods.alimentoActulizar);
+        console.log("request=decripcion:", request.payload.descripcion, "-tipo:",
+        request.payload.tipo, "-medidaCasera:",
+        request.payload.medidaCasera, "-medidaReal:",
+        request.payload.medidaReal, "-HC:",
+        request.payload.hidratosCarbono, "-proteinas:",
+        request.payload.proteinas, "-grasas:",
+        request.payload.grasas, "-sodio:",
+        request.payload.sodio, "-potasio:",
+        request.payload.potasio, "-fosforo:",
+        request.payload.fosforo, "-calcio:",
+        request.payload.calcio, "-hierro:",
+        request.payload.hierro, "-colesterol:",
+        request.payload.colesterol, "-purinas:",
+        request.payload.purinas, "-fibras:",
+        request.payload.fibras, "-agua:",
+        request.payload.agua, "-calorias:",
+        request.payload.calorias, "-codigoAlimento:",
+        request.payload.codigoAlimento);
+        connection.query(data.database.querying.alimentoActulizar,
+               [request.payload.descripcion,
+                request.payload.tipo,
+                request.payload.medidaCasera,
+                request.payload.medidaReal,
+                request.payload.hidratosCarbono,
+                request.payload.proteinas,
+                request.payload.grasas,
+                request.payload.sodio,
+                request.payload.potasio,
+                request.payload.fosforo,
+                request.payload.calcio,
+                request.payload.hierro,
+                request.payload.colesterol,
+                request.payload.purinas,
+                request.payload.fibras,
+                request.payload.agua,
+                request.payload.calorias,
+                request.payload.codigoAlimento],
+            function (error, results, fields) {
+                if (error) {
+                    console.log('[ERROR]', data.server.methods.alimentoActulizar, error.message);
+                    throw error.message;
+                } else {
+                    // console.log(results);
+                    reply(results);
+                }
+            }
+        );
+    },
+    //configuracion que permite la llamada dentro del mismo servidor para el error 
+    config: {
+        cors: {
+            origin: ['http://localhost:4200'],
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
+    }
+});
