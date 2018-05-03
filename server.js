@@ -609,28 +609,10 @@ server.route({
 // metodo POST actualizar informacion de laboratorio del paciente
 server.route({
     method: data.server.typePOST,
-    path: data.server.methods.alimentoActulizar,
+    path: data.server.methods.alimentoActualizar,
     handler: function (request, reply) {
-        console.log("entro al POST de", data.server.methods.alimentoActulizar);
-        console.log("request=decripcion:", request.payload.descripcion, "-tipo:",
-        request.payload.tipo, "-medidaCasera:",
-        request.payload.medidaCasera, "-medidaReal:",
-        request.payload.medidaReal, "-HC:",
-        request.payload.hidratosCarbono, "-proteinas:",
-        request.payload.proteinas, "-grasas:",
-        request.payload.grasas, "-sodio:",
-        request.payload.sodio, "-potasio:",
-        request.payload.potasio, "-fosforo:",
-        request.payload.fosforo, "-calcio:",
-        request.payload.calcio, "-hierro:",
-        request.payload.hierro, "-colesterol:",
-        request.payload.colesterol, "-purinas:",
-        request.payload.purinas, "-fibras:",
-        request.payload.fibras, "-agua:",
-        request.payload.agua, "-calorias:",
-        request.payload.calorias, "-codigoAlimento:",
-        request.payload.codigoAlimento);
-        connection.query(data.database.querying.alimentoActulizar,
+        console.log("entro al POST de", data.server.methods.alimentoActualizar);
+        connection.query(data.database.querying.alimentoActualizar,
                [request.payload.descripcion,
                 request.payload.tipo,
                 request.payload.medidaCasera,
@@ -651,16 +633,92 @@ server.route({
                 request.payload.codigoAlimento],
             function (error, results, fields) {
                 if (error) {
-                    console.log('[ERROR]', data.server.methods.alimentoActulizar, error.message);
+                    console.log('[ERROR]', data.server.methods.alimentoActualizar, error.message);
                     throw error.message;
                 } else {
-                    // console.log(results);
                     reply(results);
                 }
             }
         );
     },
     //configuracion que permite la llamada dentro del mismo servidor para el error 
+    config: {
+        cors: {
+            origin: ['http://localhost:4200'],
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
+    }
+});
+//metodo PUT para insertar un nuevo alimento
+server.route({
+    method: data.server.typePUT,
+    path: data.server.methods.alimentoAgregar,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.alimentoAgregar,
+            [request.payload.codigoParam,
+             request.payload.descripcionParam,
+             request.payload.tipoParam,
+             request.payload.caseraParam,
+             request.payload.caseraMedidaParam,
+             request.payload.realParam,
+             request.payload.realMedidaParam,
+             request.payload.hidratosParam,
+             request.payload.hidratosMedidaParam,
+             request.payload.proteinaParam,
+             request.payload.proteinaMedidaParam,
+             request.payload.grasaParam,
+             request.payload.grasaMedidaParam,
+             request.payload.sodioParam,
+             request.payload.sodioMedidaParam,
+             request.payload.potasioParam,
+             request.payload.potasioMedidaParam,
+             request.payload.fosforoParam,
+             request.payload.fosforoMedidaParam,
+             request.payload.calcioParam,
+             request.payload.calcioMedidaParam,
+             request.payload.hierroParam,
+             request.payload.hierroMedidaParam,
+             request.payload.colesterolParam,
+             request.payload.colesterolMedidaParam,
+             request.payload.purinaParam,
+             request.payload.purinasMedidaParam,
+             request.payload.fibraParam,
+             request.payload.fibraMedidaParam,
+             request.payload.aguaParam,
+             request.payload.aguaMedidaParam,
+             request.payload.caloriasParam],
+            function (error, results, fields) {
+                console.log(data.server.methods.alimentoAgregar, "insercion de un nuevo alimento", request.payload, "resultado: ", results);
+                if (error) throw error;
+                reply(results);
+            }
+        );
+    },
+    config: {
+        cors: {
+            origin: ['http://localhost:4200'],
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
+    }
+});
+//metodo DELETE para borrar registro de un alimento
+server.route({
+    method: data.server.typePOST,
+    path: data.server.methods.alimentoEliminar,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.alimentoEliminar,
+            [request.payload.codigoParam],
+            function (error, results, fields) {
+                console.log(data.server.methods.alimentoEliminar, "eliminar alimento", request.payload.codigoParam, "resultado: ", results);
+                if (error) {
+                    console.log(error);
+                    reply(error);
+                } else {
+                    reply(results);
+                }
+            }
+        );
+    },
     config: {
         cors: {
             origin: ['http://localhost:4200'],

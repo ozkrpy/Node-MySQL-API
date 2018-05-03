@@ -27,7 +27,9 @@ module.exports = {
             alimentos: '/alimentos',
             alimentoPorId: '/alimentoPorId/{busqueda}',
             alimentosBusqueda: '/alimentosPorDescripcion/{busqueda}',
-            alimentoActulizar: '/alimentoActualizar/',
+            alimentoActualizar: '/alimentoActualizar/',
+            alimentoAgregar:'/alimentoAgregar',
+            alimentoEliminar:'/alimentoEliminar',
             dietasCodigo: '/dietas',
             dietasPorId: '/dietas/{codigoDieta}',
 
@@ -59,17 +61,21 @@ module.exports = {
             pacienteEliminar: 'DELETE FROM paciente WHERE codigo_paciente = ?',
             alimentos: `SELECT a.codigo_alimento, a.descripcion_alimento, b.descripcion_tipo_alimento, a.medida_casera, a.medida_casera_unidad, a.medida_real, a.medida_real_unidad, a.hidratos_carbono, a.unidad_medida_hidratos_carbono, a.proteina, a.unidad_medida_proteina, a.grasa, a.unidad_medida_grasa, a.sodio, a.unidad_medida_sodio, a.potasio, a.unidad_medida_potasio, a.fosforo, a.unidad_medida_fosforo, a.calcio, a.unidad_medida_calcio, a.hierro, a.unidad_medida_hierro, a.colesterol, a.unidad_medida_colesterol, a.purinas, a.unidad_medida_purinas, a.fibra, a.unidad_medida_fibra, a.agua, a.unidad_medida_agua, a.calorias 
                         FROM nutriciondb.alimentos a, nutriciondb.tipo_alimento b 
-                        WHERE a.tipo_alimento = b.codigo_tipo_alimento`,
+                        WHERE a.tipo_alimento = b.codigo_tipo_alimento
+                        ORDER BY a.codigo_alimento`,
             alimentoPorId: `SELECT a.codigo_alimento, a.descripcion_alimento, a.tipo_alimento, b.descripcion_tipo_alimento, a.medida_casera, a.medida_casera_unidad, a.medida_real, a.medida_real_unidad, a.hidratos_carbono, a.unidad_medida_hidratos_carbono, a.proteina, a.unidad_medida_proteina, a.grasa, a.unidad_medida_grasa, a.sodio, a.unidad_medida_sodio, a.potasio, a.unidad_medida_potasio, a.fosforo, a.unidad_medida_fosforo, a.calcio, a.unidad_medida_calcio, a.hierro, a.unidad_medida_hierro, a.colesterol, a.unidad_medida_colesterol, a.purinas, a.unidad_medida_purinas, a.fibra, a.unidad_medida_fibra, a.agua, a.unidad_medida_agua, a.calorias 
                             FROM alimentos a, tipo_alimento b 
                             WHERE a.tipo_alimento = b.codigo_tipo_alimento 
                             AND a.codigo_alimento = ?`,
             alimentosBusqueda: `SELECT * FROM alimentos WHERE descripcion_alimento LIKE ?`,
-            alimentoActulizar: `UPDATE alimentos 
-                                SET descripcion_alimento = ?, tipo_alimento = ?, medida_casera = ?, medida_real = ?,
-                                    hidratos_carbono = ?, proteina = ?, grasa = ?, sodio = ?, potasio = ?, fosforo = ?, 
-                                    calcio = ?, hierro = ?, colesterol = ?, purinas = ?, fibra = ?, agua = ?, calorias = ?
-                                WHERE codigo_alimento = ?`, 
+            alimentoActualizar: `UPDATE alimentos 
+                                 SET descripcion_alimento = ?, tipo_alimento = ?, medida_casera = ?, medida_real = ?,
+                                     hidratos_carbono = ?, proteina = ?, grasa = ?, sodio = ?, potasio = ?, fosforo = ?, 
+                                     calcio = ?, hierro = ?, colesterol = ?, purinas = ?, fibra = ?, agua = ?, calorias = ?
+                                 WHERE codigo_alimento = ?`, 
+            alimentoAgregar: `INSERT INTO alimentos (codigo_alimento,descripcion_alimento,tipo_alimento,medida_casera,medida_casera_unidad,medida_real,medida_real_unidad,hidratos_carbono,unidad_medida_hidratos_carbono,proteina,unidad_medida_proteina,grasa,unidad_medida_grasa,sodio,unidad_medida_sodio,potasio,unidad_medida_potasio,fosforo,unidad_medida_fosforo,calcio,unidad_medida_calcio,hierro,unidad_medida_hierro,colesterol,unidad_medida_colesterol,purinas,unidad_medida_purinas,fibra,unidad_medida_fibra,agua,unidad_medida_agua,calorias)
+                              VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+            alimentoEliminar:'DELETE FROM alimentos WHERE codigo_alimento = ?',
             dietasCodigo: 'SELECT DISTINCT (d.codigo_dieta) FROM dieta d ORDER BY 1',
             dietasPorId: `SELECT d.*, a.*, p.* 
                           FROM dieta d, alimentos a, paciente p 
