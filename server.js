@@ -151,42 +151,6 @@ server.route({
         );
     }
 });
-//metodo que recupera los distintos codigos de dietas en la bd, ordenados de menor a mayor
-server.route({
-    method: data.server.typeGET,
-    path: data.server.methods.dietasCodigo,
-    handler: function (request, reply) {
-        connection.query(data.database.querying.dietasCodigo,
-            function (error, results, fields) {
-                if (error) throw error;
-                console.log(data.database.querying.dietasCodigo, "solicito codigos de dietas");
-                reply(results);
-            }
-        );
-    }
-});
-//metodo que recupera el detalle de una dieta segun su codigo de dieta
-server.route({
-    method: data.server.typeGET,
-    path: data.server.methods.dietasPorId,
-    handler: function (request, reply) {
-        connection.query(data.database.querying.dietasPorId,
-            [request.params.codigoDieta],
-            function (error, results, fields) {
-                if (error) throw error;
-                console.log(data.server.methods.dietasPorId, "solicito detalle de dieta:", request.params.codigoDieta);
-                reply(results);
-            }
-        );
-    },
-    config: {
-        validate: {
-            params: {//params
-                codigoDieta: Joi.number().integer()
-            }
-        }
-    }
-});
 // metodo POST para validar login 
 server.route({
     method: data.server.typePOST,
@@ -724,5 +688,19 @@ server.route({
             origin: ['http://localhost:4200'],
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
+    }
+});
+//metodo para recuperar todas las referencias de dietas
+server.route({
+    method: data.server.typeGET,
+    path: data.server.methods.dietasReferencia,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.dietasReferencia,
+            function (error, results, fields) {
+                if (error) throw error;
+                console.log(data.server.methods.dietasReferencia, "solicito listado de dietas");
+                reply(results);
+            }
+        );
     }
 });

@@ -30,8 +30,7 @@ module.exports = {
             alimentoActualizar: '/alimentoActualizar/',
             alimentoAgregar:'/alimentoAgregar',
             alimentoEliminar:'/alimentoEliminar',
-            dietasCodigo: '/dietas',
-            dietasPorId: '/dietas/{codigoDieta}',
+            dietasReferencia: '/dietasReferencia',
 
         }
     },
@@ -76,12 +75,10 @@ module.exports = {
             alimentoAgregar: `INSERT INTO alimentos (codigo_alimento,descripcion_alimento,tipo_alimento,medida_casera,medida_casera_unidad,medida_real,medida_real_unidad,hidratos_carbono,unidad_medida_hidratos_carbono,proteina,unidad_medida_proteina,grasa,unidad_medida_grasa,sodio,unidad_medida_sodio,potasio,unidad_medida_potasio,fosforo,unidad_medida_fosforo,calcio,unidad_medida_calcio,hierro,unidad_medida_hierro,colesterol,unidad_medida_colesterol,purinas,unidad_medida_purinas,fibra,unidad_medida_fibra,agua,unidad_medida_agua,calorias)
                               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
             alimentoEliminar:'DELETE FROM alimentos WHERE codigo_alimento = ?',
-            dietasCodigo: 'SELECT DISTINCT (d.codigo_dieta) FROM dieta d ORDER BY 1',
-            dietasPorId: `SELECT d.*, a.*, p.* 
-                          FROM dieta d, alimentos a, paciente p 
-                          WHERE d.codigo_alimento = a.codigo_alimento 
-                          AND d.codigo_paciente = p.codigo_paciente 
-                          AND codigo_dieta = ?`
+            dietasReferencia: `SELECT a.codigo_referencia_x_dieta, a.codigo_dieta, a.hidratos_carbono, a.proteinas, a.grasas, a.fibras, a.codigo_paciente, b.nombre, b.apellido, a.fecha_creacion, a.fecha_ultima_modificacion 
+                               FROM referencia_x_dieta a, paciente b
+                               WHERE a.codigo_paciente = b.codigo_paciente
+                               ORDER BY a.codigo_dieta`
         }
     }
 };
