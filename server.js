@@ -704,3 +704,47 @@ server.route({
         );
     }
 });
+//metodo para recuperar una referencia de dieta especifica
+server.route({
+    method: data.server.typeGET,
+    path: data.server.methods.dietasReferenciaPorId,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.dietasReferenciaPorId,
+            [request.params.busqueda],
+            function (error, results, fields) {
+                if (error) throw error;
+                console.log(data.server.methods.dietasReferenciaPorId, "solicito referencia de dieta por Id:", request.params.busqueda);
+                reply(results);
+            }
+        );
+    },
+    config: {
+        validate: {
+            params: {//params
+                busqueda: Joi.number().integer()
+            }
+        }
+    }
+});
+//metodo para recuperar una referencia de dieta especifica
+server.route({
+    method: data.server.typeGET,
+    path: data.server.methods.dietasAlimentosPorId,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.dietasAlimentosPorId,
+            [request.params.busqueda],
+            function (error, results, fields) {
+                if (error) throw error;
+                console.log(data.server.methods.dietasAlimentosPorId, "solicito alimentos de dieta por Id:", request.params.busqueda);
+                reply(results);
+            }
+        );
+    },
+    config: {
+        validate: {
+            params: {//params
+                busqueda: Joi.number().integer()
+            }
+        }
+    }
+});

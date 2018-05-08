@@ -31,6 +31,8 @@ module.exports = {
             alimentoAgregar:'/alimentoAgregar',
             alimentoEliminar:'/alimentoEliminar',
             dietasReferencia: '/dietasReferencia',
+            dietasReferenciaPorId: '/dietasReferenciaPorId/{busqueda}',
+            dietasAlimentosPorId: '/dietasAlimentosPorId/{busqueda}'
 
         }
     },
@@ -78,7 +80,16 @@ module.exports = {
             dietasReferencia: `SELECT a.codigo_referencia_x_dieta, a.codigo_dieta, a.hidratos_carbono, a.proteinas, a.grasas, a.fibras, a.codigo_paciente, b.nombre, b.apellido, a.fecha_creacion, a.fecha_ultima_modificacion 
                                FROM referencia_x_dieta a, paciente b
                                WHERE a.codigo_paciente = b.codigo_paciente
-                               ORDER BY a.codigo_dieta`
+                               ORDER BY a.codigo_dieta`,
+            dietasReferenciaPorId:`SELECT a.codigo_referencia_x_dieta, a.codigo_dieta, a.hidratos_carbono, a.proteinas, a.grasas, a.fibras, a.codigo_paciente, b.nombre, b.apellido, a.fecha_creacion, a.fecha_ultima_modificacion 
+                                   FROM referencia_x_dieta a, paciente b
+                                   WHERE a.codigo_paciente = b.codigo_paciente
+                                   AND a.codigo_dieta = ?`,
+            dietasAlimentosPorId: `SELECT a.numero_item, a.cantidad_alimento, b.codigo_alimento,b.descripcion_alimento,b.tipo_alimento,c.descripcion_tipo_alimento,b.medida_casera,b.medida_casera_unidad,b.medida_real,b.medida_real_unidad,b.hidratos_carbono,b.unidad_medida_hidratos_carbono,b.proteina,b.unidad_medida_proteina,b.grasa,b.unidad_medida_grasa,b.sodio,b.unidad_medida_sodio,b.potasio,b.unidad_medida_potasio,b.fosforo,b.unidad_medida_fosforo,b.calcio,b.unidad_medida_calcio,b.hierro,b.unidad_medida_hierro,b.colesterol,b.unidad_medida_colesterol,b.purinas,b.unidad_medida_purinas,b.fibra,b.unidad_medida_fibra,b.agua,b.unidad_medida_agua,b.calorias
+                                   FROM nutriciondb.dieta a, alimentos b, tipo_alimento c
+                                   WHERE a.codigo_alimento = b.codigo_alimento
+                                   AND b.tipo_alimento = c.codigo_tipo_alimento
+                                   AND a.codigo_dieta = ?`,
         }
     }
 };
