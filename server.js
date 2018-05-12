@@ -726,7 +726,7 @@ server.route({
         }
     }
 });
-//metodo para recuperar una referencia de dieta especifica
+//metodo para recuperar alimentos de una dieta especifica
 server.route({
     method: data.server.typeGET,
     path: data.server.methods.dietasAlimentosPorId,
@@ -745,6 +745,29 @@ server.route({
             params: {//params
                 busqueda: Joi.number().integer()
             }
+        }
+    }
+});
+//metodo PUT para insertar un nuevo alimento a una dieta especifica
+server.route({
+    method: data.server.typePUT,
+    path: data.server.methods.dietasInsertarAlimento,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.dietasInsertarAlimento,
+            [request.payload.codigoDieta,
+             request.payload.codigoAlimento,
+             request.payload.cantidad],
+            function (error, results, fields) {
+                console.log(data.server.methods.dietasInsertarAlimento, "insercion de un nuevo alimento a la dieta", request.payload, "resultado: ", results);
+                if (error) throw error;
+                reply(results);
+            }
+        );
+    },
+    config: {
+        cors: {
+            origin: ['http://localhost:4200'],
+            additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
 });

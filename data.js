@@ -32,7 +32,8 @@ module.exports = {
             alimentoEliminar:'/alimentoEliminar',
             dietasReferencia: '/dietasReferencia',
             dietasReferenciaPorId: '/dietasReferenciaPorId/{busqueda}',
-            dietasAlimentosPorId: '/dietasAlimentosPorId/{busqueda}'
+            dietasAlimentosPorId: '/dietasAlimentosPorId/{busqueda}',
+            dietasInsertarAlimento: '/dietasAgregar'
 
         }
     },
@@ -90,6 +91,8 @@ module.exports = {
                                    WHERE a.codigo_alimento = b.codigo_alimento
                                    AND b.tipo_alimento = c.codigo_tipo_alimento
                                    AND a.codigo_dieta = ?`,
+            dietasInsertarAlimento: `INSERT INTO dieta (codigo_dieta,codigo_alimento,codigo_paciente,cantidad_alimento,numero_item)
+                                     VALUES (?,?,null,?,null)`
         }
     }
 };
