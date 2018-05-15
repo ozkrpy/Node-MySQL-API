@@ -771,3 +771,34 @@ server.route({
         }
     }
 });
+// metodo POST actualizar referencias de dieta
+server.route({
+    method: data.server.typePOST,
+    path: data.server.methods.dietasActualizarReferencias,
+    handler: function (request, reply) {
+        console.log("entro al POST de", data.server.methods.dietasActualizarReferencias);
+        connection.query(data.database.querying.dietasActualizarReferencias,
+            [request.payload.hidratos,
+             request.payload.proteinas,
+             request.payload.grasas,
+             request.payload.fibras,
+             request.payload.codigoDieta],
+            function (error, results, fields) {
+                if (error) {
+                    console.log('[ERROR]', data.server.methods.dietasActualizarReferencias, error.message);
+                    throw error.message;
+                } else {
+                    // console.log(results);
+                    reply(results);
+                }
+            }
+        );
+    },
+    //configuracion que permite la llamada dentro del mismo servidor para el error 
+    config: {
+        cors: {
+            origin: ['http://localhost:4200'],
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
+    }
+});
