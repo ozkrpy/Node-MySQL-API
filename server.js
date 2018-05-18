@@ -802,3 +802,80 @@ server.route({
         }
     }
 });
+//metodo DELETE para borrar registro de un alimento
+server.route({
+    method: data.server.typePOST,
+    path: data.server.methods.dietasEliminarAlimento,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.dietasEliminarAlimento,
+            [request.payload.codigoDietaParam,
+             request.payload.itemParam],
+            function (error, results, fields) {
+                console.log(data.server.methods.dietasEliminarAlimento, "eliminar alimento de la dieta", request.payload.codigoDietaParam, "resultado: ", results);
+                if (error) {
+                    console.log(error);
+                    reply(error);
+                } else {
+                    reply(results);
+                }
+            }
+        );
+    },
+    config: {
+        cors: {
+            origin: ['http://localhost:4200'],
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
+    }
+});
+//metodo DELETE para borrar una dieta completamente
+server.route({
+    method: data.server.typePOST,
+    path: data.server.methods.dietasEliminar,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.dietasEliminar,
+            [request.payload.codigoDietaParam],
+            function (error, results, fields) {
+                console.log(data.server.methods.dietasEliminar, "eliminar la dieta", request.payload.codigoDietaParam, "resultado: ", results);
+                if (error) {
+                    console.log(error);
+                    reply(error);
+                } else {
+                    reply(results);
+                }
+            }
+        );
+    },
+    config: {
+        cors: {
+            origin: ['http://localhost:4200'],
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
+    }
+});
+//metodo PUT para insertar un nuevo alimento
+server.route({
+    method: data.server.typePUT,
+    path: data.server.methods.dietasAgregar,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.dietasAgregar,
+            [request.payload.codigoDietaParam,
+             request.payload.hidratosParam,
+             request.payload.proteinasParam,
+             request.payload.grasasParam,
+             request.payload.fibrasParam,
+             request.payload.pacienteParam],
+            function (error, results, fields) {
+                console.log(data.server.methods.dietasAgregar, "insercion de un nueva dieta", request.payload, "resultado: ", results);
+                if (error) throw error;
+                reply(results);
+            }
+        );
+    },
+    config: {
+        cors: {
+            origin: ['http://localhost:4200'],
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
+    }
+});

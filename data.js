@@ -33,8 +33,11 @@ module.exports = {
             dietasReferencia: '/dietasReferencia',
             dietasReferenciaPorId: '/dietasReferenciaPorId/{busqueda}',
             dietasAlimentosPorId: '/dietasAlimentosPorId/{busqueda}',
-            dietasInsertarAlimento: '/dietasAgregar',
-            dietasActualizarReferencias: '/dietasEditarReferencias'
+            dietasInsertarAlimento: '/dietasAgregarAlimento',
+            dietasActualizarReferencias: '/dietasEditarReferencias', 
+            dietasEliminarAlimento: '/dietasEliminarAlimento',
+            dietasEliminar: '/dietasEliminar',
+            dietasAgregar: '/dietasAgregar'
 
         }
     },
@@ -96,7 +99,14 @@ module.exports = {
                                      VALUES (?,?,null,?,null)`,
             dietasActualizarReferencias: `UPDATE referencia_x_dieta
                                           SET hidratos_carbono = ?, proteinas = ?, grasas = ?, fibras = ?
-                                          WHERE codigo_dieta = ?`
+                                          WHERE codigo_dieta = ?`,
+            dietasEliminarAlimento: `DELETE FROM dieta
+                                     WHERE codigo_dieta = ? 
+                                     AND numero_item = ?`,
+            dietasEliminar: `DELETE FROM referencia_x_dieta
+                             WHERE codigo_dieta = ?`,
+            dietasAgregar: `INSERT INTO referencia_x_dieta (codigo_dieta, hidratos_carbono, proteinas, grasas, fibras, codigo_paciente) 
+                            VALUES (?, ?, ?, ?, ?, ?)`
                                      
         }
     }
