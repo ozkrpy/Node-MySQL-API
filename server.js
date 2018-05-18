@@ -879,3 +879,17 @@ server.route({
         }
     }
 });
+//metodo para recuperar todos los alimentos
+server.route({
+    method: data.server.typeGET,
+    path: data.server.methods.dietasSecuencia,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.dietasSecuencia,
+            function (error, results, fields) {
+                if (error) throw error;
+                console.log(data.server.methods.dietasSecuencia, "dietas numero MAX", results);
+                reply(results);
+            }
+        );
+    }
+});
