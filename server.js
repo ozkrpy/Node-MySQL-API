@@ -741,7 +741,6 @@ server.route({
             function (error, results, fields) {
                 if (error) throw error;
                 console.log(data.server.methods.dietasReferencia, "solicito listado de dietas");
-                console.log(IP);
                 reply(results);
             }
         );
