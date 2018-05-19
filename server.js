@@ -10,6 +10,11 @@ var data = require('./data');
     Date: 08/01/2017
     Last modification: 21/12/2017 16:48    
 */
+//CORS for IP
+const IP = ['http://localhost:4200',
+            'http://192.168.1.61',
+            'http://192.168.1.64',
+            'http://192.168.1.64:8080'];
 
 //SERVER INSTATIATION
 const server = new Hapi.Server();
@@ -112,6 +117,13 @@ server.route({
                 reply(results);
             }
         );
+    },
+    //configuracion que permite la llamada dentro del mismo servidor para el error 
+    config: {
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
     }
 });
 //metodo para recuperar un paciente especifico
@@ -133,6 +145,10 @@ server.route({
             params: {//params
                 busqueda: Joi.number().integer()
             }
+        },
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
 });
@@ -149,6 +165,13 @@ server.route({
                 reply(results);
             }
         );
+    },
+    //configuracion que permite la llamada dentro del mismo servidor para el error 
+    config: {
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
     }
 });
 // metodo POST para validar login 
@@ -179,6 +202,10 @@ server.route({
                 usuarioId: Joi.string().alphanum().min(3).max(30).required(),
                 password: Joi.string().regex(/^[a-zA-Z0-9]{4,30}$/).required()
             }
+        },
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
 });
@@ -271,7 +298,7 @@ server.route({
     //configuracion que permite la llamada dentro del mismo servidor para el error 
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -301,7 +328,7 @@ server.route({
     //configuracion que permite la llamada dentro del mismo servidor para el error 
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -334,7 +361,7 @@ server.route({
     //configuracion que permite la llamada dentro del mismo servidor para el error 
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -369,7 +396,7 @@ server.route({
     //configuracion que permite la llamada dentro del mismo servidor para el error 
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -416,7 +443,7 @@ server.route({
     //configuracion que permite la llamada dentro del mismo servidor para el error 
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -441,6 +468,10 @@ server.route({
             params: {//params
                 talla: Joi.number().integer()
             }
+        },
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
 });
@@ -504,7 +535,7 @@ server.route({
     },
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -529,7 +560,7 @@ server.route({
     },
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -546,6 +577,13 @@ server.route({
                 reply(results);
             }
         );
+    },
+    //configuracion que permite la llamada dentro del mismo servidor para el error 
+    config: {
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
     }
 });
 //metodo para recuperar un alimento especifico
@@ -567,6 +605,10 @@ server.route({
             params: {//params
                 busqueda: Joi.number().integer()
             }
+        },
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
 });
@@ -608,7 +650,7 @@ server.route({
     //configuracion que permite la llamada dentro del mismo servidor para el error 
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -660,7 +702,7 @@ server.route({
     },
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -685,7 +727,7 @@ server.route({
     },
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -699,9 +741,17 @@ server.route({
             function (error, results, fields) {
                 if (error) throw error;
                 console.log(data.server.methods.dietasReferencia, "solicito listado de dietas");
+                console.log(IP);
                 reply(results);
             }
         );
+    },
+    //configuracion que permite la llamada dentro del mismo servidor para el error 
+    config: {
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
     }
 });
 //metodo para recuperar una referencia de dieta especifica
@@ -723,6 +773,10 @@ server.route({
             params: {//params
                 busqueda: Joi.number().integer()
             }
+        },
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
 });
@@ -745,6 +799,10 @@ server.route({
             params: {//params
                 busqueda: Joi.number().integer()
             }
+        },
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
 });
@@ -766,7 +824,7 @@ server.route({
     },
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -797,7 +855,7 @@ server.route({
     //configuracion que permite la llamada dentro del mismo servidor para el error 
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -823,7 +881,7 @@ server.route({
     },
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -848,7 +906,7 @@ server.route({
     },
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
@@ -874,12 +932,12 @@ server.route({
     },
     config: {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
         }
     }
 });
-//metodo para recuperar todos los alimentos
+//metodo para recuperar la secuencia de la ultima dieta
 server.route({
     method: data.server.typeGET,
     path: data.server.methods.dietasSecuencia,
@@ -891,5 +949,12 @@ server.route({
                 reply(results);
             }
         );
+    },
+    //configuracion que permite la llamada dentro del mismo servidor para el error 
+    config: {
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
     }
 });
