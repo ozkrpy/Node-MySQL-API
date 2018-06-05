@@ -152,6 +152,32 @@ server.route({
         }
     }
 });
+//metodo para recuperar un paciente especifico
+server.route({
+    method: data.server.typeGET,
+    path: data.server.methods.pacienteHistorial,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.pacienteHistorial,
+            [request.params.busqueda],
+            function (error, results, fields) {
+                if (error) throw error;
+                console.log(data.server.methods.pacienteHistorial, "solicito historial paciente por Id:", request.params.busqueda);
+                reply(results);
+            }
+        );
+    },
+    config: {
+        validate: {
+            params: {//params
+                busqueda: Joi.number().integer()
+            }
+        },
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
+    }
+});
 //metodo que se encarga de recuperar los alimentos segun un texto criterio
 server.route({
     method: data.server.typeGET,
