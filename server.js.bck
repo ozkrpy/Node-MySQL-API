@@ -12,15 +12,14 @@ var data = require('./data');
 */
 //CORS for IP
 const IP = [
-    '*'
+    'http://localhost:4200'
 ];
 
 //SERVER INSTATIATION
 const server = new Hapi.Server();
 server.connection({
     host: data.server.host,
-    port: data.server.port,
-    routes: { cors: true }
+    port: data.server.port
 });
 server.start((err) => {
     if (err) {
@@ -47,6 +46,63 @@ server.route({
     handler: function (request, reply) {
         console.log(data.server.methods.helloWorld, "metodohola mundo");
         return reply({ "id": 1, "message": "OK a holaMundo" });
+    }
+});
+//metodo que recupera todos los usuarios
+server.route({
+    method: data.server.typeGET,
+    path: data.server.methods.usuarios,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.usuarios,
+            function (error, results, fields) {
+                if (error) throw error;
+                console.log(data.server.methods.usuarios, "solicito usuarios");
+                reply(results);
+            }
+        );
+    },
+    config: {
+        validate: {
+            params: {//params
+                uid: Joi.number().integer()
+            }
+        }
+    }
+});
+//metodo para recuperar informacion de un usuario especifico
+server.route({
+    method: data.server.typeGET,
+    path: data.server.methods.usuariosPorUsuario,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.usuariosUserPassByUsuario,
+            [request.params.usuarioId],
+            function (error, results, fields) {
+                if (error) throw error;
+                console.log(data.server.methods.usuariosPorUsuario, "solicito usuario:", request.params.usuario);
+                reply(results);
+            }
+        );
+    },
+    config: {
+        validate: {
+            params: {//params
+                uid: Joi.number().integer()
+            }
+        }
+    }
+});
+//metodo para actualizar password de un usuario especifico
+server.route({
+    method: data.server.typePOST,
+    path: data.server.methods.usuariosActualizaClave,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.usuariosActualizaClave,
+            [request.payload.nuevaClave, request.payload.usuarioId],
+            function (error, results, fields) {
+                if (error) throw error;
+                reply(results);
+            }
+        );
     }
 });
 //metodo para recuperar todos los pacientes
@@ -141,6 +197,104 @@ server.route({
         cors: {
             origin: IP,
             additionalHeaders: ['cache-control', 'x-requested-with']
+        }
+    }
+});
+// metodo POST para validar login 
+server.route({
+    method: data.server.typePOST,
+    path: data.server.methods.usuariosValidacion,
+    handler: function (request, reply) {
+        var orgPassword = false;
+        connection.query(data.database.querying.usuariosPorUsuario,
+            [request.payload.usuarioId],
+            function (error, results, fields) {
+                if (error) {
+                    console.log('[ERROR]', data.server.methods.usuariosValidacion, error.message);
+                    throw error;
+                } else {
+                    console.log(results);
+                    if (typeof results[0] !== 'undefined') {
+                        orgPassword = Bcrypt.compareSync(request.payload.password, results[0].palabra_clave);
+                    }
+                }
+                reply(orgPassword);
+            }
+        );
+    },
+    config: {
+        validate: {
+            payload: {//payload
+                usuarioId: Joi.string().alphanum().min(3).max(30).required(),
+                password: Joi.string().regex(/^[a-zA-Z0-9]{4,30}$/).required()
+            }
+        },
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
+    }
+});
+// metodo POST para insertar usuario login: recibe password como texto plano
+server.route({
+    method: data.server.typePOST,
+    path: data.server.methods.usuariosCrear,
+    handler: function (request, reply) {
+        //encryption
+        var salt = Bcrypt.genSaltSync();
+        var encryptedPassword = Bcrypt.hashSync(request.payload.palabraClave, salt);
+        connection.query(data.database.querying.usuariosCrear,
+            [request.payload.usuarioId,
+                encryptedPassword,
+            request.payload.email],
+            function (error, results, fields) {
+                if (error) {
+                    console.log('[ERROR]', data.server.methods.usuariosCrear, error.message);
+                    throw error;
+                } else {
+                    console.log(results);
+                    reply(results);
+                }
+            }
+        );
+    },
+    config: {
+        validate: {
+            payload: {//payload
+                usuarioId: Joi.string().alphanum().min(3).max(30).required(),
+                email: Joi.string().email(),
+                palabraClave: Joi.string().regex(/^[a-zA-Z0-9]{4,30}$/).required()
+            }
+        }
+    }
+});
+// metodo POST para insertar usuario login: recibe password como texto encriptado
+server.route({
+    method: data.server.typePOST,
+    path: data.server.methods.usuariosCrearSinValidacion,
+    handler: function (request, reply) {
+        connection.query(data.database.querying.usuariosCrear,
+            [request.payload.usuarioId,
+            request.payload.palabraClave,
+            request.payload.email],
+            function (error, results, fields) {
+                if (error) {
+                    console.log('[ERROR]', data.server.methods.usuariosCrearSinValidacion, error.message);
+                    throw error.message;
+                } else {
+                    console.log(results);
+                    reply(results);
+                }
+            }
+        );
+    },
+    config: {
+        validate: {
+            payload: {//payload
+                usuarioId: Joi.string().alphanum().min(3).max(30).required(),
+                email: Joi.string().email(),
+                palabraClave: Joi.string().regex(/^[a-zA-Z0-9]{4,30}$/).required()
+            }
         }
     }
 });
@@ -829,162 +983,3 @@ server.route({
         }
     }
 });
-
-/*
-    //metodo que recupera todos los usuarios
-    server.route({
-        method: data.server.typeGET,
-        path: data.server.methods.usuarios,
-        handler: function (request, reply) {
-            connection.query(data.database.querying.usuarios,
-                function (error, results, fields) {
-                    if (error) throw error;
-                    console.log(data.server.methods.usuarios, "solicito usuarios");
-                    reply(results);
-                }
-            );
-        },
-        config: {
-            validate: {
-                params: {//params
-                    uid: Joi.number().integer()
-                }
-            }
-        }
-    });
-    //metodo para recuperar informacion de un usuario especifico
-    server.route({
-        method: data.server.typeGET,
-        path: data.server.methods.usuariosPorUsuario,
-        handler: function (request, reply) {
-            connection.query(data.database.querying.usuariosUserPassByUsuario,
-                [request.params.usuarioId],
-                function (error, results, fields) {
-                    if (error) throw error;
-                    console.log(data.server.methods.usuariosPorUsuario, "solicito usuario:", request.params.usuario);
-                    reply(results);
-                }
-            );
-        },
-        config: {
-            validate: {
-                params: {//params
-                    uid: Joi.number().integer()
-                }
-            }
-        }
-    });
-    //metodo para actualizar password de un usuario especifico
-    server.route({
-        method: data.server.typePOST,
-        path: data.server.methods.usuariosActualizaClave,
-        handler: function (request, reply) {
-            connection.query(data.database.querying.usuariosActualizaClave,
-                [request.payload.nuevaClave, request.payload.usuarioId],
-                function (error, results, fields) {
-                    if (error) throw error;
-                    reply(results);
-                }
-            );
-        }
-    });
-    // metodo POST para validar login 
-    server.route({
-        method: data.server.typePOST,
-        path: data.server.methods.usuariosValidacion,
-        handler: function (request, reply) {
-            var orgPassword = false;
-            connection.query(data.database.querying.usuariosPorUsuario,
-                [request.payload.usuarioId],
-                function (error, results, fields) {
-                    if (error) {
-                        console.log('[ERROR]', data.server.methods.usuariosValidacion, error.message);
-                        throw error;
-                    } else {
-                        console.log(results);
-                        if (typeof results[0] !== 'undefined') {
-                            orgPassword = Bcrypt.compareSync(request.payload.password, results[0].palabra_clave);
-                        }
-                    }
-                    reply(orgPassword);
-                }
-            );
-        },
-        config: {
-            validate: {
-                payload: {//payload
-                    usuarioId: Joi.string().alphanum().min(3).max(30).required(),
-                    password: Joi.string().regex(/^[a-zA-Z0-9]{4,30}$/).required()
-                }
-            },
-            cors: {
-                origin: IP,
-                additionalHeaders: ['cache-control', 'x-requested-with']
-            }
-        }
-    });
-    // metodo POST para insertar usuario login: recibe password como texto plano
-    server.route({
-        method: data.server.typePOST,
-        path: data.server.methods.usuariosCrear,
-        handler: function (request, reply) {
-            //encryption
-            var salt = Bcrypt.genSaltSync();
-            var encryptedPassword = Bcrypt.hashSync(request.payload.palabraClave, salt);
-            connection.query(data.database.querying.usuariosCrear,
-                [request.payload.usuarioId,
-                    encryptedPassword,
-                request.payload.email],
-                function (error, results, fields) {
-                    if (error) {
-                        console.log('[ERROR]', data.server.methods.usuariosCrear, error.message);
-                        throw error;
-                    } else {
-                        console.log(results);
-                        reply(results);
-                    }
-                }
-            );
-        },
-        config: {
-            validate: {
-                payload: {//payload
-                    usuarioId: Joi.string().alphanum().min(3).max(30).required(),
-                    email: Joi.string().email(),
-                    palabraClave: Joi.string().regex(/^[a-zA-Z0-9]{4,30}$/).required()
-                }
-            }
-        }
-    });
-    // metodo POST para insertar usuario login: recibe password como texto encriptado
-    server.route({
-        method: data.server.typePOST,
-        path: data.server.methods.usuariosCrearSinValidacion,
-        handler: function (request, reply) {
-            connection.query(data.database.querying.usuariosCrear,
-                [request.payload.usuarioId,
-                request.payload.palabraClave,
-                request.payload.email],
-                function (error, results, fields) {
-                    if (error) {
-                        console.log('[ERROR]', data.server.methods.usuariosCrearSinValidacion, error.message);
-                        throw error.message;
-                    } else {
-                        console.log(results);
-                        reply(results);
-                    }
-                }
-            );
-        },
-        config: {
-            validate: {
-                payload: {//payload
-                    usuarioId: Joi.string().alphanum().min(3).max(30).required(),
-                    email: Joi.string().email(),
-                    palabraClave: Joi.string().regex(/^[a-zA-Z0-9]{4,30}$/).required()
-                }
-            }
-        }
-    });
-
-*/
