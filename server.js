@@ -484,7 +484,7 @@ server.route({
         }
     }
 });
-// metodo POST actualizar informacion de laboratorio del paciente
+// metodo POST actualizar informacion de un alimento
 server.route({
     method: data.server.typePOST,
     path: data.server.methods.alimentoActualizar,

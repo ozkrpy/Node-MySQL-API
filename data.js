@@ -1,7 +1,8 @@
 module.exports = {
     server: {
         // host: 'localhost',
-        host: '192.168.100.110',
+        // host: '192.168.100.110',
+        host: '192.168.1.4',//usar para produccion
         port: '9092',
         typeGET: 'GET',
         typePOST: 'POST',
