@@ -829,6 +829,37 @@ server.route({
         }
     }
 });
+// metodo POST actualizar cantidad de alimento de dieta
+server.route({
+    method: data.server.typePOST,
+    path: data.server.methods.dietasEditarCantidad,
+    handler: function (request, reply) {
+        console.log("entro al POST de", data.server.methods.dietasEditarCantidad);
+        connection.query(data.database.querying.dietasEditarCantidad,
+            [request.payload.cantidad,
+             request.payload.codigoDieta,
+             request.payload.item],
+            function (error, results, fields) {
+                if (error) {
+                    console.log('[ERROR]', data.server.methods.dietasEditarCantidad, error.message);
+                    throw error.message;
+                } else {
+                    // console.log(results);
+                    reply(results);
+                }
+            }
+        );
+    },
+    //configuracion que permite la llamada dentro del mismo servidor para el error 
+    config: {
+        cors: {
+            origin: IP,
+            additionalHeaders: ['cache-control', 'x-requested-with']
+        }
+    }
+});
+
+
 
 /*
     //metodo que recupera todos los usuarios

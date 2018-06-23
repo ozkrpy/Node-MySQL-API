@@ -41,7 +41,8 @@ module.exports = {
             dietasEliminarAlimento: '/dietasEliminarAlimento',
             dietasEliminar: '/dietasEliminar',
             dietasAgregar: '/dietasAgregar',
-            dietasSecuencia: '/dietasSecuencia'
+            dietasSecuencia: '/dietasSecuencia',
+            dietasEditarCantidad: '/dietasEditarCantidad'
 
         }
     },
@@ -115,7 +116,11 @@ module.exports = {
                              WHERE codigo_dieta = ?`,
             dietasAgregar: `INSERT INTO referencia_x_dieta (codigo_dieta, hidratos_carbono, proteinas, grasas, fibras, codigo_paciente) 
                             VALUES (?, ?, ?, ?, ?, ?)`,
-            dietasSecuencia: 'SELECT MAX(codigo_dieta)+1 AS SecuenciaDieta FROM referencia_x_dieta'
+            dietasSecuencia: 'SELECT MAX(codigo_dieta)+1 AS SecuenciaDieta FROM referencia_x_dieta',
+            dietasEditarCantidad: `UPDATE dieta
+                                   SET cantidad_alimento = ?
+                                   WHERE codigo_dieta = ?
+                                   AND numero_item = ?`
                                      
         }
     }
