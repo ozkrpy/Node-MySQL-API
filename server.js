@@ -46,7 +46,7 @@ server.route({
     path: data.server.methods.helloWorld,
     handler: function (request, reply) {
         console.log(data.server.methods.helloWorld, "metodohola mundo");
-        return reply({ "id": 1, "message": "OK a holaMundo" });
+        return reply("OK");
     }
 });
 //metodo para recuperar todos los pacientes
